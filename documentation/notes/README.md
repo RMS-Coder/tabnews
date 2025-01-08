@@ -11,6 +11,7 @@ Plataforma que permite compartilhar conteúdos de valor, tirar dúvidas e realiz
 - Docker
 - PostgreSQL
 - PG
+- Node PG Migrate - 6.2.2
 
 ## Comandos
 
@@ -88,6 +89,12 @@ nvm install react@18.2.0
 
 ```
 nvm install react-dom@18.2.0
+```
+
+- permite expandir variáveis em arquivos .env. Ele processa variáveis de ambiente que fazem referência a outras variáveis de ambiente definidas no mesmo arquivo .env.
+
+```
+npm install dotenv-expand@11.0.6
 ```
 
 ## CodeSpaces
@@ -217,12 +224,11 @@ git pull
 
 <br>
 
-Renomear arquivos (Mover um arquivo para outro com o novo nome) 
+Renomear arquivos (Mover um arquivo para outro com o novo nome)
 
 ```
 git mv <nome do arquivo> <Novo Nome do arquivo>
 ```
-
 
 ### Descrição dos Commits
 
@@ -467,4 +473,50 @@ psql --host=localhost --username=postgres --port=5432
 
 ```
 \q
+```
+
+## Node PG Migrate
+
+- Criar uma nova migração dentro da pasta infra.
+
+```
+node-pg-migrate --migration-dir infra/migrations create
+```
+
+ou
+
+```
+node-pg-migrate --m infra/migrations create
+```
+
+- Usar o .env com o Node PG Migrate
+
+```
+npm install dotenv@16.4.4
+```
+
+- Existe duas formas de rodar migrações:
+
+  - Dry Run - Que apenas mostra como as alteração vão afetar o banco de dados;
+  - Wet Run - Ná pratica, modificando realmente o banco de dados.
+
+## Testes
+
+- Em vez de rodar todos os arquivos de testes, executar um em específico.
+
+```
+npm run test:watch -- migrations
+```
+
+- Caso tenha mais casos de teste e queira executar a penas 1.
+
+```
+npm run test:watch -- migrations.post
+```
+
+- Rodar o Jest em modo serial
+  Altere em package.json
+
+```
+test: "jest --runInBand"
 ```
