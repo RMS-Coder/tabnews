@@ -1,4 +1,4 @@
-# TabNews
+# TabNews curl
 
 Plataforma que permite compartilhar conteúdos de valor, tirar dúvidas e realizar interações por meio de publicações e comentários.
 
@@ -133,6 +133,14 @@ Apresenta todos os Commits do projeto.
 git log
 ```
 
+ou
+
+```
+git log --graph
+```
+
+Que adiciona um gráfico ao lado dos commits.
+
 Mostra de forma resumida os commits
 
 ```
@@ -190,14 +198,74 @@ git commit --amend
 visualizar as branch (ramificações).
 Cada branch é uma linha do tempo do projeto.
 
+Lista a branch que estou no momento.
+
 ```
 git branch
 ```
+
+Criar uma nova branch
+
+```
+git branch <Nome da nova Branch>
+```
+
+Trocar de branch
+
+```
+git checkout <Nome da Branch>
+```
+
+ou
+
+```
+git switch <Nome da Branch>
+```
+
+Criar uma Branch e mudar para ele
+
+```
+git checkout -b <Nome da nova Branch>
+```
+
+OBS: Será necessário no commit
+
+```
+git push --set-upstream origin <Nome branch>
+```
+
+Remover uma branch
+
+```
+git branch -d <nome da branch>
+```
+
+Remover uma branch (Ser antes realizar MERGE)
+
+```
+git branch -D <nome da branch>
+```
+
+Recuperar branch apagadas por engano.
+(Será necessário ter a HASH do commit)
+Caso não tenha a HASH, diferente do "git log" que registra os commits de uma branch, use:
+
+```
+git reflog
+```
+
+Que registra tudo o que aconteceu no repositório do Git (Todas as referências).
 
 Empurra os arquivos com status staged para a branch main (origin) ou outro linha do tempo que esteja selecionada.
 
 ```
 git push
+```
+
+Execute em seguida o comando para fichar a branch de volta na HASH
+
+```
+git checkout -b <Nome da Branch> <Hash do commit>
 ```
 
 Quando ocorrer a necessidade de usar o "git commit --amend" após ter enviado para o repositório do GitHub use
@@ -290,6 +358,36 @@ Adicionar opções ao servidor
 
 ```
 curl https://76.76.21.21 --insecure --verbose --header 'Host: fintab.com.br'
+```
+
+Parâmetros adicionais como o método HTTP
+
+```
+curl -X POST https://tabnews-gules.vercel.app
+```
+
+Saída formatada com Python3
+
+```
+curl -s -X <Método> <Endereço URL> | python3 -m json.tool
+```
+
+Ou saída formatada com jq.
+
+```
+curl -s -X <Método> <Endereço URL> | jq
+```
+
+Observar e reexecutar o comando a cada 2s.
+
+```
+watch 'curl -s -X <Método> <Endereço URL> | jq'
+```
+
+Observar e reexecutar o comando em um intervalo de tempo específico.
+
+```
+watch -n <número em segundos> 'curl -s -X <Método> <Endereço URL> | jq'
 ```
 
 Listar os processos que estão estão por traz de um ambiente (Environment)
