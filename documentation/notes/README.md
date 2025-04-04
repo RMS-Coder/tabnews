@@ -1,17 +1,34 @@
-# TabNews curl
+# TabNews
 
 Plataforma que permite compartilhar conteúdos de valor, tirar dúvidas e realizar interações por meio de publicações e comentários.
 
 ## Tecnologias:
 
-- Node JS - 18.20.4
-- NVM
-- Next JS - 13.1.6
-- Jest - 20.6.2
-- Docker
-- PostgreSQL
-- PG
-- Node PG Migrate - 6.2.2
+### Dependencies
+
+- **async-retry**: Uma biblioteca para facilitar a implementação de lógica de repetição assíncrona, permitindo a reexecução de operações assíncronas até que sejam bem-sucedidas ou um limite seja atingido.
+- **dotenv**: Carrega variáveis de ambiente de um arquivo `.env` para `process.env`, ajudando a manter segredos e configuração fora do código-fonte.
+- **dotenv-expand**: Expande variáveis referenciadas em outras variáveis do arquivo `.env`, fornecendo uma extensão para `dotenv`.
+- **next**: Um framework React para renderização no lado do servidor (SSR) e geração de sites estáticos.
+- **node-pg-migrate**: Uma biblioteca de migração para bancos de dados PostgreSQL, permitindo a criação e aplicação de scripts de migração de maneira programática.
+- **pg**: Um cliente PostgreSQL para Node.js, usado para se conectar e interagir com bancos de dados PostgreSQL.
+- **react**: Uma biblioteca JavaScript para construção de interfaces de usuário, baseada em componentes.
+- **react-dom**: Um pacote que fornece métodos específicos do DOM que podem ser usados no nível superior da aplicação React.
+
+### DevDependencies
+
+- **@commitlint/cli**: Uma ferramenta de CLI para verificar se as mensagens de commit seguem as regras de convenção especificadas.
+- **@commitlint/config-conventional**: Um conjunto de regras de convenção de commit que se baseia nas especificações do Angular.
+- **commitizen**: Uma ferramenta para fazer commits amigáveis, seguindo convenções específicas.
+- **concurrently**: Executa múltiplos comandos simultaneamente, útil para rodar scripts de desenvolvimento.
+- **cz-conventional-changelog**: Adaptador para `commitizen`, seguindo o padrão de commit convencional.
+- **eslint**: Uma ferramenta de linting para identificar e corrigir problemas em seu código JavaScript.
+- **eslint-config-next**: Configurações ESLint específicas para projetos Next.js.
+- **eslint-config-prettier**: Desativa regras ESLint que poderiam conflitar com Prettier.
+- **eslint-plugin-jest**: Conjunto de regras ESLint para o framework de teste Jest.
+- **husky**: Ferramenta para gerenciar ganchos do Git, como pre-commit e pre-push.
+- **jest**: Um framework de teste JavaScript para garantir a qualidade do código.
+- **prettier**: Um formatador de código que enforces a consistência de estilo de código em toda a base de código.
 
 ## Comandos
 
@@ -45,6 +62,18 @@ Definir uma versão padrão para ser utilizada em um Shell.
 
 ```
 nvm alias default lts/hydrogen
+```
+
+npx - Executa os módulos do projeto no terminal
+
+```
+npx <comando do módulo>
+```
+
+Exemplo:
+
+```
+echo "test" | npx commitlint
 ```
 
 ### Arquivos
@@ -97,6 +126,18 @@ nvm install react-dom@18.2.0
 npm install dotenv-expand@11.0.6
 ```
 
+- Verificar quais dependências estão desatualizadas
+
+```
+npm outdated
+```
+
+- Verificar brechas de segurança das dependências (Auditoria)
+
+```
+npm audit
+```
+
 ## CodeSpaces
 
 - Limpar o terminal -> Ctrl + L
@@ -112,6 +153,18 @@ npm run dev
 - Clique na antena (Canto inferior esquerdo).
 
 - Em "Visibilidade da Porta" altere para público para visualizar em outro dispositivo.
+
+Rodar a bateria de testes:
+
+```
+npm run test
+```
+
+ou com tempo de execução
+
+```
+time npm run test
+```
 
 ## Git
 
@@ -287,7 +340,16 @@ OBS: Caso esteja trabalhando em grupo para não perder trabalhos pois o commit s
 Faz o download dos arquivos do repositório.
 
 ```
-git pull
+git clone <Endereço .git do repositório>
+```
+
+<br>
+
+Serve para atualizar os arquivos no ambiente de desenvolvimento depois de um pull request.
+
+```
+git pull origin main
+
 ```
 
 <br>
@@ -298,13 +360,103 @@ Renomear arquivos (Mover um arquivo para outro com o novo nome)
 git mv <nome do arquivo> <Novo Nome do arquivo>
 ```
 
+Juntar vários comandos em um
+OBS: Este adiciona todas as mudanças, emenda no commit mais recente sem alterar a mensagem e força o envio ao repositório remoto.
+
+```
+git add -A && git commit --amend --no-edit && git push -f
+```
+
+---
+
+- Conforme o curso, após um pull request deve-se executar os seguintes comandos.
+
+Voltar para a raiz do projeto.
+
+```
+git checkout main
+```
+
+Deletar a branch anterior
+
+```
+git branch -d <Nome da branch>
+```
+
+Atualizar o CodeSpace com o código da main
+
+```
+git pull
+```
+
+Criar uma nova branch
+
+```
+git checkout -b <Nome nova branch>
+```
+
+---
+
+- Troca a base de um commit - Quando se usa uma branch desatualizada e deseja se fazer a linha dos commits
+
+```
+git rebase main
+```
+
+comparar um commit com outro
+
+Exemplo: Vai comparar o commit anterior com o ultimo commit
+
+```
+git diff HEAD~1 HEAD
+```
+
+Renomear commits anteriores e reaplicar os commits posteriores
+Esse comando abrirá o editor padrão onde você poderá escolher e editar os commits desejados.
+
+```
+git rebase -i HEAD~2
+```
+
+Altere no topo "pick" por "r" ou "reword" dizendo que quer renomear o commit.
+Salve e feche o editor. O Git abrirá novamente o editor para que você altere a mensagem do commit escolhido.
+Edite a mensagem do commit conforme desejado, salve e feche o editor novamente.
+
+Confirme com:
+
+```
+git rebase --continue
+```
+
+Ou se não quiser aplicar as alterações use:
+
+```
+git rebase --abort
+```
+
+---
+
 ### Descrição dos Commits
+
+Ou **Conventional Commits** - [text](https://www.conventionalcommits.org/en/v1.0.0/)
+
+Aspecto:
+
+```
+<type>(opcional escopo): <descrição>
+```
+
+Exemplo:
+
+```
+feat(escopo): mensagem principal
+```
 
 O uso de identificadores no início das mensagens de commit é uma prática que ajuda a categorizar as mudanças feitas no projeto. Aqui está uma lista de identificadores comuns e seu significado:
 
 - feat: Adição de uma nova funcionalidade (feature).
 
-- fix: Correção de um bug.
+- fix: Correção de um bug. Sem introduzir um novo comportamento.
 
 - docs: Alterações na documentação.
 
@@ -321,6 +473,16 @@ O uso de identificadores no início das mensagens de commit é uma prática que 
 - ci: Mudanças na configuração de integração contínua.
 
 - build: Mudanças que afetam o sistema de build ou dependências externas (ex. Gulp, Gradle, npm).
+
+### GitHub Actions
+
+Configurar o commitlint no GitHub Actions
+
+https://commitlint.js.org/guides/ci-setup.html
+
+```
+npx commitlint --from ${{ github.event_request.base.sha }} --to ${{ github.event_request.head.sha }} --verbose
+```
 
 ## Linux
 
@@ -394,6 +556,12 @@ Listar os processos que estão estão por traz de um ambiente (Environment)
 
 ```
 env
+```
+
+Exibir ultimo exit code
+
+```
+echo $?
 ```
 
 ## Prettier
@@ -473,6 +641,12 @@ test("GEt to /api/v1/status", async () => {
 ```
 
 ## Docker Compose
+
+- Apagar todas as imagens do Docker que estão no sistema
+
+```
+docker system prune -a
+```
 
 - Verificar versões
 
@@ -618,3 +792,22 @@ npm run test:watch -- migrations.post
 ```
 test: "jest --runInBand"
 ```
+
+- .only - Executa apenas este teste.
+
+```
+test.only("Teste de SQL Injection", async () => {
+  await fetch("http://localhost:3000/api/v1/status?databasename='; SELECT pg_sleep(4); --'");
+});
+```
+
+## Semantic Versioning
+
+- [ ].[ ].[ ]
+  major . minor . patch
+
+Ex: 1.0.0
+
+- Patch - Quando a alterações más que não trazem nenhuma mudança na aplicação, algo foi melhorado ou alterado mas não muda nada na usabilidade do sistema.
+- Minor - Quando há a implementação de novas funcionalidades no sistema.
+- Major - Quando algo mudou, o recurso que antes retornava um valor x agora retorna um valor y. O que pode quebrar algo na aplicação.

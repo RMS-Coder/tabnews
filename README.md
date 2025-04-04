@@ -4,14 +4,31 @@ Plataforma que permite compartilhar conteúdos de valor, tirar dúvidas e realiz
 
 ## Tecnologias:
 
-- Node JS - 18.20.4
-- NVM
-- Next JS - 13.1.6
-- Jest - 20.6.2
-- Docker
-- PostgreSQL
-- PG
-- Node PG Migrate - 6.2.2
+### Dependencies
+
+- **async-retry**: Uma biblioteca para facilitar a implementação de lógica de repetição assíncrona, permitindo a reexecução de operações assíncronas até que sejam bem-sucedidas ou um limite seja atingido.
+- **dotenv**: Carrega variáveis de ambiente de um arquivo `.env` para `process.env`, ajudando a manter segredos e configuração fora do código-fonte.
+- **dotenv-expand**: Expande variáveis referenciadas em outras variáveis do arquivo `.env`, fornecendo uma extensão para `dotenv`.
+- **next**: Um framework React para renderização no lado do servidor (SSR) e geração de sites estáticos.
+- **node-pg-migrate**: Uma biblioteca de migração para bancos de dados PostgreSQL, permitindo a criação e aplicação de scripts de migração de maneira programática.
+- **pg**: Um cliente PostgreSQL para Node.js, usado para se conectar e interagir com bancos de dados PostgreSQL.
+- **react**: Uma biblioteca JavaScript para construção de interfaces de usuário, baseada em componentes.
+- **react-dom**: Um pacote que fornece métodos específicos do DOM que podem ser usados no nível superior da aplicação React.
+
+### DevDependencies
+
+- **@commitlint/cli**: Uma ferramenta de CLI para verificar se as mensagens de commit seguem as regras de convenção especificadas.
+- **@commitlint/config-conventional**: Um conjunto de regras de convenção de commit que se baseia nas especificações do Angular.
+- **commitizen**: Uma ferramenta para fazer commits amigáveis, seguindo convenções específicas.
+- **concurrently**: Executa múltiplos comandos simultaneamente, útil para rodar scripts de desenvolvimento.
+- **cz-conventional-changelog**: Adaptador para `commitizen`, seguindo o padrão de commit convencional.
+- **eslint**: Uma ferramenta de linting para identificar e corrigir problemas em seu código JavaScript.
+- **eslint-config-next**: Configurações ESLint específicas para projetos Next.js.
+- **eslint-config-prettier**: Desativa regras ESLint que poderiam conflitar com Prettier.
+- **eslint-plugin-jest**: Conjunto de regras ESLint para o framework de teste Jest.
+- **husky**: Ferramenta para gerenciar ganchos do Git, como pre-commit e pre-push.
+- **jest**: Um framework de teste JavaScript para garantir a qualidade do código.
+- **prettier**: Um formatador de código que enforces a consistência de estilo de código em toda a base de código.
 
 ## Iniciar o projeto
 
