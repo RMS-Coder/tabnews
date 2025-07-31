@@ -13,12 +13,11 @@ jobs:
       - name: Checkout do repositório destino
         uses: actions/checkout@v3
 
-      - name: Clonar e copiar arquivos da origem
+      - name: Clonar e copiar arquivos
         run: |
           git clone --depth=1 --branch=main https://github.com/RodrigoMS/clone-tabnews.git origem
           cp -r origem/* ./
-          cp -r origem/.* ./ 2>/dev/null || true
-          git rm --cached -r origem || true
+          cp -r origem/.[!.]* ./ 2>/dev/null || true
           rm -rf origem/
 
       - name: Commit e push
@@ -27,11 +26,11 @@ jobs:
         run: |
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
-
+          
           if ! git diff --quiet; then
             git add .
             git commit -m "Sync automático do clone-tabnews"
             git push https://x-access-token:${GH_TOKEN}@github.com/RMS-Coder/tabnews.git HEAD:main
           else
-            echo "Nenhuma alteração detectada."
+            echo "Nenhuma alteração detectada. Nada a commitar."
           fi
