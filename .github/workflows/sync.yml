@@ -19,9 +19,8 @@ jobs:
 
       - name: Commit e push
         run: |
-          git config user.name "GitHub Action"
-          git config user.email "action@github.com"
-          git add -A
-          git diff --cached --quiet || git commit -m "Sync automático do clone-tabnews"
+          git config user.name "GitHub Action" 
+          git config user.email "action@github.com" 
+          git add . git commit -m "Sync automático do clone-tabnews" || echo "Nada novo para commitar" 
           git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/RMS-Coder/tabnews.git HEAD:main
 
