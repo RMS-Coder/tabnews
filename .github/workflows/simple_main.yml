@@ -9,6 +9,11 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout current repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Important to get full git history
+
       - name: Sync repository
         uses: repo-sync/github-sync@v2
         with:
