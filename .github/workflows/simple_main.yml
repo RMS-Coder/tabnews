@@ -1,24 +1,33 @@
-name: Sync with upstream
+name: Sync Repository
 
 on:
   schedule:
-    - cron: '0 * * * *'
-  workflow_dispatch:
+    - cron: '0 * * * *'  # Executa a cada hora
+  workflow_dispatch:      # Permite execução manual
 
 jobs:
   sync:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write     # Dá permissão para push
+
     steps:
-      - name: Checkout current repository
+      - name: Checkout target repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          repository: RMS-Coder/tabnews
           token: ${{ secrets.PAT_TOKEN }}
+          fetch-depth: 0  # Pega todo o histórico
 
-      - name: Sync repository
-        uses: repo-sync/github-sync@v2
-        with:
-          source_repo: "RodrigoMS/clone-tabnews"
-          source_branch: "main"
-          destination_branch: "main"
-          github_token: ${{ secrets.PAT_TOKEN }}
+      - name: Add upstream remote
+        run: |
+          git remote add upstream https://github.com/RodrigoMS/clone-tabnews.git
+          git fetch upstream --tags
+
+      - name: Merge changes
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git checkout main
+          git merge upstream/main --strategy-option theirs --allow-unrelated-histories
+          git push origin main
