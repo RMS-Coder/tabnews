@@ -13,24 +13,53 @@ jobs:
       - name: Checkout do repositório destino
         uses: actions/checkout@v3
 
-      - name: Clonar e copiar arquivos
+      - name: Verificar se houve mudanças no clone-tabnews
         run: |
           git clone --depth=1 --branch=main https://github.com/RodrigoMS/clone-tabnews.git origem
+
+          cd origem
+          COMMIT_ORIGEM=$(git rev-parse HEAD)
+          echo "Último commit em origem: $COMMIT_ORIGEM"
+          echo "$COMMIT_ORIGEM" > ../ultima-origem.txt
+          cd ..
+
+      - name: Verificar se commit já foi sincronizado
+        id: verificar
+        run: |
+          COMMIT_ATUAL=$(cat ultima-origem.txt)
+          COMMIT_ANTERIOR=$(cat .ultima-sincronizacao.txt 2>/dev/null || echo "nenhum")
+
+          echo "Commit anterior: $COMMIT_ANTERIOR"
+          echo "Commit novo: $COMMIT_ATUAL"
+
+          if [ "$COMMIT_ANTERIOR" = "$COMMIT_ATUAL" ]; then
+            echo "Nada novo para sincronizar."
+            echo "sincronizar=false" >> $GITHUB_OUTPUT
+          else
+            echo "Há mudanças para sincronizar."
+            echo "sincronizar=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Substituir arquivos e sincronizar
+        if: steps.verificar.outputs.sincronizar == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          # Remove todos os arquivos e pastas, exceto .git
+          find . -mindepth 1 ! -regex '^./\.git\(/.*\)?' -exec rm -rf {} +
+
+          # Copia os novos arquivos
           cp -r origem/* ./
           cp -r origem/.[!.]* ./ 2>/dev/null || true
           rm -rf origem/
 
-      - name: Commit e push
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: |
+          # Atualiza o controle de commits sincronizados
+          cp ultima-origem.txt .ultima-sincronizacao.txt
+
+          # Git e push
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
-          
-          if ! git diff --quiet; then
-            git add .
-            git commit -m "Sync automático do clone-tabnews"
-            git push https://x-access-token:${GH_TOKEN}@github.com/RMS-Coder/tabnews.git HEAD:main
-          else
-            echo "Nenhuma alteração detectada. Nada a commitar."
-          fi
+
+          git add .
+          git commit -m "Sync automática do clone-tabnews: $COMMIT_ATUAL"
+          git push https://x-access-token:${GH_TOKEN}@github.com/RMS-Coder/tabnews.git HEAD:main
