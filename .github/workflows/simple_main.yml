@@ -12,7 +12,8 @@ jobs:
       - name: Checkout current repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Important to get full git history
+          fetch-depth: 0
+          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Sync repository
         uses: repo-sync/github-sync@v2
@@ -20,4 +21,4 @@ jobs:
           source_repo: "RodrigoMS/clone-tabnews"
           source_branch: "main"
           destination_branch: "main"
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.PAT_TOKEN }}
