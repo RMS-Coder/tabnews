@@ -12,15 +12,18 @@ jobs:
       - name: Checkout do repositório destino
         uses: actions/checkout@v3
 
-      - name: Clonar repositório de origem
+      - name: Clonar repositório de origem e copiar conteúdo
         run: |
           git clone https://github.com/RodrigoMS/clone-tabnews.git origem
           rsync -av origem/ ./ --exclude=.git
+          rm -rf origem/  # Remove o repositório clonado para evitar o erro de submódulo
 
       - name: Commit e push
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          git config user.name "GitHub Action" 
-          git config user.email "action@github.com" 
-          git add . git commit -m "Sync automático do clone-tabnews" || echo "Nada novo para commitar" 
-          git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/RMS-Coder/tabnews.git HEAD:main
-
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
+          git add .
+          git commit -m "Sync automático do clone-tabnews" || echo "Nada novo para commitar"
+          git push https://x-access-token:${GH_TOKEN}@github.com/RMS-Coder/tabnews.git HEAD:main
