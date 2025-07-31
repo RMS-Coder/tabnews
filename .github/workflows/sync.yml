@@ -8,17 +8,19 @@ on:
 jobs:
   sync:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout do repositório destino
         uses: actions/checkout@v3
 
-      - name: Clonar repositório de origem e copiar conteúdo
+      - name: Clonar e copiar arquivos da origem
         run: |
-          git clone https://github.com/RodrigoMS/clone-tabnews.git origem
+          git clone --depth=1 --branch=main https://github.com/RodrigoMS/clone-tabnews.git origem
           rsync -av origem/ ./ --exclude=.git
-          rm -rf origem/  # Remove o repositório clonado para evitar o erro de submódulo
+          git rm --cached -r origem || true  # Remove do índice, se por acaso entrou
+          rm -rf origem/  # Remove fisicamente a pasta para evitar conflito de submódulo
 
-      - name: Commit e push
+      - name: Commit e push das mudanças
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
