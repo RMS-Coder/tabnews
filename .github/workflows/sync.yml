@@ -2,8 +2,8 @@ name: Sincronizar clone-tabnews para tabnews
 
 on:
   schedule:
-    - cron: '*/30 * * * *'  # Executa a cada 30 minutos
-  workflow_dispatch:        # Permite execução manual
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
 
 jobs:
   sync:
@@ -13,30 +13,25 @@ jobs:
       - name: Checkout do repositório destino
         uses: actions/checkout@v3
 
-      - name: Clonar e copiar arquivos do repositório de origem
+      - name: Clonar e copiar arquivos da origem
         run: |
-          # Clone da branch main com profundidade 1 (sem histórico)
           git clone --depth=1 --branch=main https://github.com/RodrigoMS/clone-tabnews.git origem
-          
-          # Copia os arquivos ignorando .git (estrutura interna do clone)
-          rsync -av origem/ ./ --exclude=.git
-
-          # Remove o diretório origem do índice e da pasta física
+          cp -r origem/* ./
+          cp -r origem/.* ./ 2>/dev/null || true
           git rm --cached -r origem || true
           rm -rf origem/
 
-      - name: Commit e push para repositório destino
+      - name: Commit e push
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
 
-          # Verifica se há alterações antes de commitar
           if ! git diff --quiet; then
             git add .
             git commit -m "Sync automático do clone-tabnews"
             git push https://x-access-token:${GH_TOKEN}@github.com/RMS-Coder/tabnews.git HEAD:main
           else
-            echo "Nenhuma alteração detectada, nada a commitar."
+            echo "Nenhuma alteração detectada."
           fi
